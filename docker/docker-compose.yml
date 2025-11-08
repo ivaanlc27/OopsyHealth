@@ -11,16 +11,3 @@ services:
     volumes:
       - ./app/uploads:/app/uploads
       - ./db:/app/db
-    depends_on:
-      - ftp
-
-  ftp:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.ftp
-    container_name: oopsy_ftp
-    ports:
-      - "21:21"
-      - "21100-21110:21100-21110"
-    volumes:
-      - ./lab-artifacts/ftp-share:/home/vsftpd/ftp-share
