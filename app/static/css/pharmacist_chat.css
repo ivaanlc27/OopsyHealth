@@ -1,0 +1,96 @@
+/* Pharmacist chat page */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Page header */
+h1, h2 {
+    text-align: center;
+    color: #2980b9;
+}
+
+h2 {
+    margin-top: 30px;
+    color: #16a085;
+}
+
+/* Chat form */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #bdc3c7;
+    font-size: 1rem;
+    resize: vertical;
+    transition: all 0.2s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #16a085;
+    box-shadow: 0 0 5px rgba(22,160,133,0.3);
+}
+
+button {
+    margin-top: 12px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #16a085;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: #1abc9c;
+}
+
+/* Messages list */
+ul {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+ul li {
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+ul li strong {
+    color: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    form, ul {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    textarea {
+        font-size: 0.95rem;
+    }
+}

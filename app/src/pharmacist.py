@@ -16,7 +16,7 @@ def get_db():
 @require_auth
 def dashboard():
     # Only pharmacists should use this UI in real app; the lab doesn't enforce role checks strictly here.
-    return render_template("pharmachist_dashboard.html")
+    return render_template("pharmacist_dashboard.html")
 
 @pharmacist_bp.route("/query")
 @require_auth

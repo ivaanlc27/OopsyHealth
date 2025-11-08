@@ -9,13 +9,13 @@
 -- patientpass
 -- sdhGSK7299kb@#$$jsljdlsj
 -- ndoasyr0qHHEQ3Y0
--- mls/AklNLCSyskSd62klG
+-- mlsAklNLCSyskSd62klG
 
 INSERT INTO users (name, surname, username, email, password_hash, role, phone) VALUES
 ('Alice', 'Smith', 'alice.smith', 'alice.smith@oopsyhealth.com', '$2b$12$I3l.gEJFDUdO97acELYQpu8luFtgaJO0jFEfbfS5Xh9koDVSfpg9G', 'patient', '555-001'),
 ('Bob', 'Jones', 'bob.jones', 'bob.jones@oopsyhealth.com', '$2b$12$ee/2HFhmU3KU9w08BypaGOzKpsw43f/nuSDeTVE/ILBSqgjnPSpgW', 'patient', '555-002'),
-('Carol', 'Pharm', 'carol.pharm', 'carol.pharm@oopsyhealth.com', '$2b$12$vNoXYObSU7sFkAl1Kczfpe/El0v6wSsF.jGFVAaB7S4FgJq74WQqm', 'pharmacist', '555-100'),
-('Dan', 'Doctor', 'dan.doctor', 'dan.doctor@oopsyhealth.com', '$2b$12$hNwLG.yRaLgBNP0EtBhhMOuRgZHFz.uqAMeO51hb4I/du3qenfEEa', 'doctor', '555-200');
+('Carol', 'Harvey', 'carol.harvey', 'carol.harvey@oopsyhealth.com', '$2b$12$vNoXYObSU7sFkAl1Kczfpe/El0v6wSsF.jGFVAaB7S4FgJq74WQqm', 'pharmacist', '555-100'),
+('Dan', 'Bennett', 'dan.bennett', 'dan.bennett@oopsyhealth.com', '$2b$12$01kXUmlszBejl6HfC5W30e0jyPvJAG9enLalceQM7hKNh1nz8hAcK', 'doctor', '555-200');
 
 -- Reports
 INSERT INTO reports (owner_id, title, content) VALUES

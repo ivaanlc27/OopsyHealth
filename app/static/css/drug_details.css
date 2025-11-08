@@ -1,0 +1,53 @@
+/* Drug Details / File Read page styles */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Header / filename */
+h1 {
+    text-align: center;
+    color: #2980b9; /* strong blue medical color */
+    margin-bottom: 20px;
+}
+
+/* Content pre block */
+pre {
+    background-color: #ecf0f1;
+    border: 1px solid #bdc3c7;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+    overflow-x: auto;
+    font-family: monospace;
+    white-space: pre-wrap; /* maintain line breaks */
+    word-break: break-word;
+    color: #2c3e50;
+}
+
+/* Links */
+a {
+    display: inline-block;
+    color: #16a085;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+a:hover {
+    color: #1abc9c;
+    text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+    pre {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}

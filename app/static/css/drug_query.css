@@ -1,0 +1,52 @@
+/* Drug Query / Search results page */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Page header */
+h1 {
+    text-align: center;
+    color: #2980b9; /* strong blue medical color */
+    margin-bottom: 25px;
+}
+
+/* Table styles */
+.table {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.table th {
+    background-color: #16a085;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.table tr:hover {
+    background-color: #d1f2eb; /* subtle teal hover */
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .table th, .table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}

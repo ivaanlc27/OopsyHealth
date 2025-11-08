@@ -13,7 +13,7 @@ from functools import wraps
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 APP_DIR = pathlib.Path(__file__).resolve().parents[1]
 DB_FILE = APP_DIR / "db" / "oopsy.db"
-JWT_SECRET = os.getenv("OOPSY_JWT_SECRET", "devsecret")  # fallback for dev
+JWT_SECRET = os.getenv("OOPSY_JWT_SECRET")
 
 # ----------------------
 # Database helper
@@ -61,7 +61,16 @@ def login():
         "exp": (datetime.datetime.utcnow() + datetime.timedelta(hours=2)).timestamp()
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
-    resp = make_response(redirect(url_for("reports.list_reports")))
+
+    # Redirect to dashboard according to role
+    role_dashboard = {
+        "patient": "reports.list_reports",
+        "doctor": "doctor.panel",
+        "pharmacist": "pharmacist.dashboard"
+    }
+    redirect_endpoint = role_dashboard.get(row["role"], "reports.list_reports")
+
+    resp = make_response(redirect(url_for(redirect_endpoint)))
     resp.set_cookie("oopsy_jwt", token)
     return resp
 
