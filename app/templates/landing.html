@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OopsyHealth - Login</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <header>
+    <img class="logo" src="/static/images/doner.png" alt="logo placeholder">
+    <h1>OopsyHealth - Telemedicine Lab</h1>
+  </header>
+
+  <section>
+    <h2>Login</h2>
+    {% if error %}<div class="notice">{{ error }}</div>{% endif %}
+    <form action="/auth/login" method="post">
+      <label>Username<br><input name="username"></label><br>
+      <label>Password<br><input name="password" type="password"></label><br>
+      <button type="submit">Login</button>
+    </form>
+
+    <h3>Forgot password?</h3>
+    <form action="/reset/request" method="get">
+      <button type="submit">Request password reset</button>
+    </form>
+  </section>
+</body>
+</html>

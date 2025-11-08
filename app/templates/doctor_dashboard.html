@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Doctor panel</title><link rel="stylesheet" href="/static/css/styles.css"></head>
+<body>
+  <h1>Doctor Panel</h1>
+  <h2>Pharmacist messages (rendered via template engine — SSTI demo)</h2>
+  <ul>
+    {% for m in messages %}
+      <li><strong>{{ m.author }}</strong> ({{ m.when }}): <div style="display:inline-block; border:1px solid #ccc; padding:6px;">{{ m.rendered|safe }}</div></li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

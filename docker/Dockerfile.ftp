@@ -1,0 +1,12 @@
+FROM fauria/vsftpd
+
+# Copy vsftpd config
+COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
+
+# Mount point for FTP share
+VOLUME ["/home/vsftpd/ftp-share"]
+
+EXPOSE 21 20
+EXPOSE 21100-21110
+
+CMD ["/usr/sbin/vsftpd", "/etc/vsftpd/vsftpd.conf"]

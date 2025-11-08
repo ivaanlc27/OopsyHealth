@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Pharmacist</title><link rel="stylesheet" href="/static/css/styles.css"></head>
+<body>
+  <h1>Pharmacist Dashboard</h1>
+
+  <section>
+    <h2>Drug query (vulnerable to SQLi)</h2>
+    <form action="/pharmacist/query" method="get">
+      <label>Search<br><input name="q"></label>
+      <button type="submit">Search</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Read files (LFI demo)</h2>
+    <form action="/pharmacist/drug" method="get">
+      <label>Filename (can be absolute path)<br><input name="file" placeholder="/etc/passwd or /app/templates/landing.html"></label>
+      <button type="submit">Read</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Chat to doctor (stored)</h2>
+    <form action="/pharmacist/chat" method="post">
+      <label>Message<br><textarea name="message" rows="4" cols="60"></textarea></label><br>
+      <button type="submit">Send</button>
+    </form>
+    <h3>Messages</h3>
+    <ul>
+      {% for m in messages %}
+        <li><strong>{{ m['author'] }}</strong>: {{ m['message'] }} ({{ m['created_at'] }})</li>
+      {% endfor %}
+    </ul>
+  </section>
+</body>
+</html>
