@@ -1,17 +1,29 @@
+<!-- app/templates/report_view.html -->
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Report - OopsyHealth</title>
+  <title>Report {{ report_id }} - {{ title }}</title>
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="stylesheet" href="/static/css/report_view.css">
 </head>
 <body>
   <section class="report-box">
-    <h1>Report {{ report[0] }} - {{ report[1] }}</h1>
+    <header class="report-header">
+      <h1>Report #{{ report_id }} — {{ title }}</h1>
+      <div class="report-meta">
+        <span><strong>Owner:</strong> {{ owner_full }} (<code>{{ owner_username }}</code>)</span>
+        {% if owner_email %} &nbsp;|&nbsp; <span><strong>Email:</strong> <a href="mailto:{{ owner_email }}">{{ owner_email }}</a></span>{% endif %}
+        &nbsp;|&nbsp; <span><strong>Owner ID:</strong> {{ owner_id }}</span>
+        {% if created_at %} &nbsp;|&nbsp; <span><strong>Created:</strong> {{ created_at }}</span>{% endif %}
+      </div>
+    </header>
+
     <div class="report-content">
-      <pre>{{ report[2] }}</pre>
+      <h2>Report content</h2>
+      <pre>{{ content }}</pre>
     </div>
+
     <p><a href="/reports">Back</a></p>
   </section>
 </body>

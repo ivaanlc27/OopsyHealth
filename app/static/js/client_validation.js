@@ -9,16 +9,16 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
     const f = fileInput.files[0];
-    // simple client-side checks (size < 2MB and specific types)
-    if (f.size > 2 * 1024 * 1024) {
-      alert('File too large (client-side check)');
+    // simple client-side checks (size < 10MB and specific types)
+    if (f.size > 10 * 1024 * 1024) {
+      alert('File too large');
       e.preventDefault();
       return;
     }
     const allowed = ['image/png', 'image/jpeg', 'application/pdf', 'text/plain'];
-    if (!allowed.includes(f.type) && f.name.indexOf('.test') === -1) {
+    if (!allowed.includes(f.type)) {
       // but this is bypassable by changing file extension or using curl
-      alert('Unexpected file type (client-side)');
+      alert('Unexpected file type');
       e.preventDefault();
       return;
     }
