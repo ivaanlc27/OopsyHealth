@@ -1,0 +1,42 @@
+/* Report view page specific styles */
+
+.report-box {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    color: #34495e;
+}
+
+.report-box h1 {
+    font-size: 1.8rem;
+    color: #2980b9;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.report-content pre {
+    background-color: #f4f6f7;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: monospace;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.report-box a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #16a085;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.report-box a:hover {
+    text-decoration: underline;
+}

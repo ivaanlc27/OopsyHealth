@@ -1,0 +1,35 @@
+/* Reset requested inbox page specific styles */
+
+.reset-box {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    color: #34495e;
+    text-align: left;
+}
+
+.reset-box h1 {
+    font-size: 1.8rem;
+    color: #2980b9;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.reset-box p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.reset-box a {
+    color: #16a085;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.reset-box a:hover {
+    text-decoration: underline;
+}

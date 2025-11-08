@@ -1,7 +1,7 @@
 FROM fauria/vsftpd
 
 # Copy vsftpd config
-COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
+COPY docker/vsftpd.conf /etc/vsftpd/vsftpd.conf
 
 # Mount point for FTP share
 VOLUME ["/home/vsftpd/ftp-share"]

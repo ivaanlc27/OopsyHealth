@@ -4,26 +4,43 @@
   <meta charset="utf-8">
   <title>OopsyHealth - Login</title>
   <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/landing.css">
 </head>
 <body>
   <header>
-    <img class="logo" src="/static/images/doner.png" alt="logo placeholder">
-    <h1>OopsyHealth - Telemedicine Lab</h1>
+    <img class="logo" src="/static/images/logo.png" alt="OopsyHealth Logo">
+    <h1>OopsyHealth - Telemedicine</h1>
   </header>
 
-  <section>
-    <h2>Login</h2>
-    {% if error %}<div class="notice">{{ error }}</div>{% endif %}
-    <form action="/auth/login" method="post">
-      <label>Username<br><input name="username"></label><br>
-      <label>Password<br><input name="password" type="password"></label><br>
-      <button type="submit">Login</button>
-    </form>
+  <div class="container">
+    <!-- Left info box -->
+    <aside class="starter-box">
+      <h3>Lab Starter Account</h3>
+      <p><strong>Context:</strong> You are <em>Alice Smith</em>, a patient at OopsyHealth. 
+         You booked an appointment which is scheduled six months from now. 
+         Tired of waiting, you decide to poke around the site.</p>
+      <p><strong>Credentials:</strong></p>
+      <ul>
+        <li>Username: <code>alice.smith</code></li>
+        <li>Password: <code>patientpass</code></li>
+      </ul>
+    </aside>
 
-    <h3>Forgot password?</h3>
-    <form action="/reset/request" method="get">
-      <button type="submit">Request password reset</button>
-    </form>
-  </section>
+    <!-- Login section -->
+    <section>
+      <h2>Login</h2>
+      {% if error %}<div class="notice">{{ error }}</div>{% endif %}
+      <form action="/auth/login" method="post">
+        <label>Username<br><input name="username"></label><br>
+        <label>Password<br><input name="password" type="password"></label><br>
+        <button type="submit">Login</button>
+      </form>
+
+      <h3>Forgot password?</h3>
+      <form action="/reset/request" method="get">
+        <button type="submit">Request password reset</button>
+      </form>
+    </section>
+  </div>
 </body>
 </html>

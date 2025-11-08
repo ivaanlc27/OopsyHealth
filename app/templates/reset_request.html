@@ -1,11 +1,18 @@
 <!doctype html>
 <html>
-<head><meta charset="utf-8"><title>Reset request</title></head>
+<head>
+  <meta charset="utf-8">
+  <title>Reset Request - OopsyHealth</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/reset_request.css">
+</head>
 <body>
-  <h1>Request password reset</h1>
-  <form action="/reset/request" method="post">
-    <label>Email<br><input name="email" type="email"></label><br>
-    <button type="submit">Request</button>
-  </form>
+  <section class="reset-box">
+    <h1>Request Password Reset</h1>
+    <form action="/reset/request" method="post">
+      <label>Email<br><input name="email" type="email" required></label><br>
+      <button type="submit">Request</button>
+    </form>
+  </section>
 </body>
 </html>

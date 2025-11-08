@@ -1,0 +1,59 @@
+/* Reset Use page specific styles */
+
+.reset-box {
+    max-width: 450px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: left;
+    font-family: Arial, sans-serif;
+    color: #34495e;
+}
+
+.reset-box h1 {
+    font-size: 1.8rem;
+    color: #2980b9;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.reset-box label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.reset-box input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #bdc3c7;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.reset-box input:focus {
+    outline: none;
+    border-color: #16a085;
+    box-shadow: 0 0 5px rgba(22, 160, 133, 0.3);
+}
+
+.reset-box button {
+    padding: 12px;
+    width: 100%;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #16a085;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.reset-box button:hover {
+    background-color: #1abc9c;
+}

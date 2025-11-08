@@ -1,0 +1,144 @@
+/* Landing page specific styles */
+
+/* Full page centering */
+section {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 35px 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Header/logo */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header .logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #2980b9; /* strong blue medical color */
+}
+
+/* Section title */
+section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: #16a085; /* teal / medical accent */
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-align: left;
+    color: #34495e;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #bdc3c7;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #16a085;
+    box-shadow: 0 0 5px rgba(22, 160, 133, 0.3);
+}
+
+/* Buttons */
+button {
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #16a085;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: #1abc9c;
+}
+
+/* Forgot password */
+h3 {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #34495e;
+}
+
+h3 button {
+    background-color: #95a5a6;
+}
+
+h3 button:hover {
+    background-color: #7f8c8d;
+}
+
+/* Notice (errors) */
+.notice {
+    background-color: #e74c3c;
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* Landing page specific layout */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Left starter info box */
+.starter-box {
+    max-width: 300px;
+    background-color: #ecf0f1; /* light gray */
+    border-left: 5px solid #16a085; /* teal accent */
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #2c3e50;
+    text-align: justify;
+    line-height: 1.5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.starter-box h3 {
+    margin-top: 0;
+    color: #16a085;
+    text-align: center;
+}
+
+.starter-box code {
+    background-color: #dfe6e9;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+.starter-box ul {
+    padding-left: 20px;
+    margin-top: 5px;
+}

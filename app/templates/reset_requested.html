@@ -1,10 +1,17 @@
 <!doctype html>
 <html>
-<head><meta charset="utf-8"><title>Reset requested</title></head>
+<head>
+  <meta charset="utf-8">
+  <title>Reset Requested - OopsyHealth</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/reset_requested.css">
+</head>
 <body>
-  <h1>Reset requested</h1>
-  <p>For the lab this page shows the reset token (simulated email):</p>
-  <pre>{{ token }}</pre>
-  <p>Use /reset/use to continue the flow.</p>
+  <section class="reset-box">
+    <h1>Reset Requested</h1>
+    <p>For the lab, this page shows the reset token (simulated email):</p>
+    <pre>{{ token }}</pre>
+    <p>Use <code>/reset/use</code> to continue the flow.</p>
+  </section>
 </body>
 </html>

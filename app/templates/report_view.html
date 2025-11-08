@@ -2,14 +2,17 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Report</title>
+  <title>Report - OopsyHealth</title>
   <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/report_view.css">
 </head>
 <body>
-  <h1>Report {{ report[0] }} - {{ report[1] }}</h1>
-  <div>
-    <pre>{{ report[2] }}</pre>
-  </div>
-  <p><a href="/reports">Back</a></p>
+  <section class="report-box">
+    <h1>Report {{ report[0] }} - {{ report[1] }}</h1>
+    <div class="report-content">
+      <pre>{{ report[2] }}</pre>
+    </div>
+    <p><a href="/reports">Back</a></p>
+  </section>
 </body>
 </html>

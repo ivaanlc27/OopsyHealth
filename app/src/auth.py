@@ -4,29 +4,56 @@ import os
 import pathlib
 import jwt
 import datetime
+import bcrypt
+from functools import wraps
 
+# ----------------------
+# Configuration
+# ----------------------
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 APP_DIR = pathlib.Path(__file__).resolve().parents[1]
 DB_FILE = APP_DIR / "db" / "oopsy.db"
-JWT_SECRET = os.getenv("OOPSY_JWT_SECRET")
+JWT_SECRET = os.getenv("OOPSY_JWT_SECRET", "devsecret")  # fallback for dev
 
+# ----------------------
+# Database helper
+# ----------------------
 def get_db():
     conn = sqlite3.connect(str(DB_FILE))
     conn.row_factory = sqlite3.Row
     return conn
 
+# ----------------------
+# Login route
+# ----------------------
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("landing.html", error=None)
-    username = request.form.get("username", "")
+
+    username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
+
     conn = get_db()
-    cur = conn.execute("SELECT id, username, role FROM users WHERE username=? AND password=?", (username, password))
+    cur = conn.execute(
+        "SELECT id, username, role, password_hash FROM users WHERE username=?",
+        (username,)
+    )
     row = cur.fetchone()
     if not row:
         return render_template("landing.html", error="Invalid credentials")
-    # Issue JWT (HMAC-SHA256)
+
+    stored_hash = row["password_hash"]
+    if not stored_hash:
+        return render_template("landing.html", error="Account has no password set")
+
+    try:
+        if not bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+            return render_template("landing.html", error="Invalid credentials")
+    except Exception:
+        return render_template("landing.html", error="Authentication error")
+
+    # Password correct -> issue JWT
     payload = {
         "sub": row["username"],
         "role": row["role"],
@@ -35,20 +62,21 @@ def login():
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
     resp = make_response(redirect(url_for("reports.list_reports")))
-    # store JWT in a cookie (no HttpOnly/Secure flags for lab simplicity)
     resp.set_cookie("oopsy_jwt", token)
     return resp
 
+# ----------------------
+# Logout route
+# ----------------------
 @auth_bp.route("/logout")
 def logout():
-    resp = make_response(redirect(url_for("landing")))
+    resp = make_response(redirect(url_for("auth.login")))
     resp.set_cookie("oopsy_jwt", "", expires=0)
     return resp
 
-# Simple decorator to read JWT and set g.user
-from functools import wraps
-from flask import abort
-
+# ----------------------
+# Auth decorator
+# ----------------------
 def require_auth(f):
     @wraps(f)
     def inner(*args, **kwargs):
@@ -59,6 +87,6 @@ def require_auth(f):
             data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         except Exception:
             return redirect(url_for("auth.login"))
-        g.user = data  # note: stores role and sub
+        g.user = data  # stores username and role
         return f(*args, **kwargs)
     return inner

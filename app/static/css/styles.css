@@ -1,38 +1,40 @@
-body { 
-    font-family: Arial, Helvetica, sans-serif; 
-    margin: 20px; 
+/* Global Styles for OopsyHealth */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-header { 
-    display:flex; 
-    align-items:center; 
-    gap: 12px; 
+body {
+    background-color: #eaf6f6; /* soft medical background */
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
 }
 
-img.logo { 
-    height: 56px; 
+a {
+    text-decoration: none;
+    color: #3498db;
 }
 
-form { 
-    margin-top: 12px; 
-    margin-bottom: 12px; 
+button {
+    font-family: inherit;
 }
 
-input, textarea { 
-    padding: 6px; 
-    margin: 4px 0; 
-    width: 100%; 
-    max-width: 480px; 
+.notice {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+    border-radius: 6px;
+    text-align: center;
 }
 
-button { 
-    padding: 8px 12px; 
-} .table { 
-    width: 100%; 
-    border-collapse: collapse; 
-} .table th, .table td { 
-    border: 1px solid #ccc; 
-    padding: 6px; 
-} .notice { 
-    color: #a00; 
+/* Headers globally */
+header h1 {
+    font-weight: 600;
+    color: #2c3e50;
 }

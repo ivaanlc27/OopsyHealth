@@ -4,27 +4,26 @@
   <meta charset="utf-8">
   <title>Inbox - OopsyHealth</title>
   <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/inbox_list.css">
 </head>
 <body>
   <h1>Inbox</h1>
   <p>Logged in as {{ user }}</p>
+
   {% if messages and messages|length > 0 %}
-    <table class="table">
-      <thead><tr><th>ID</th><th>Subject</th><th>Sent at</th><th>View</th></tr></thead>
-      <tbody>
-      {% for m in messages %}
-        <tr>
-          <td>{{ m['id'] }}</td>
-          <td>{{ m['subject'] }}</td>
-          <td>{{ m['sent_at'] }}</td>
-          <td><a href="/inbox/view/{{ m['id'] }}">View</a></td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+    {% for m in messages %}
+      <div class="message-card">
+        <div>
+          <div class="subject">{{ m['subject'] }}</div>
+          <div class="timestamp">{{ m['sent_at'] }}</div>
+        </div>
+        <a href="/inbox/view/{{ m['id'] }}">View</a>
+      </div>
+    {% endfor %}
   {% else %}
-    <p>No messages.</p>
+    <p class="no-messages">No messages.</p>
   {% endif %}
-  <p><a href="/reports">Back to dashboard</a></p>
+
+  <p><a class="back-link" href="/reports">Back to dashboard</a></p>
 </body>
 </html>
