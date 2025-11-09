@@ -7,12 +7,25 @@ require_once __DIR__ . '/../includes/jwt_utils.php';
 $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
+
+// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+$query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
+$query->execute([$payload['username'] ?? '']);
+$db_role = $query->fetchColumn();
+if (!$db_role  || $db_role !== ($payload['role'] ?? '')) {
+    header('Location: /');
+    exit;
+}
+
 if (!$payload || ($payload['role'] ?? '') !== 'doctor') {
     header('Location: /');
     exit;
 }
 
-$doctor_id = $payload['sub'];
+// Obtener id a partir del username
+$query = $pdo->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+$query->execute([$payload['username'] ?? '']);
+$doctor_id = $query->fetchColumn();
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

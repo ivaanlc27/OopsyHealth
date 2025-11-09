@@ -12,7 +12,6 @@ $doctor_id = 4;
 // Build JWT for the doctor and set as cookie so the headless browser has auth
 $secret = get_jwt_secret_from_db($pdo);
 $payload = [
-    'sub' => (int)$doctor_id,
     'username' => 'david.bennett',
     'role' => 'doctor',
     'iat' => time(),

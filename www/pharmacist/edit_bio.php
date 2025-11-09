@@ -7,6 +7,16 @@ require_once __DIR__ . '/../includes/jwt_utils.php';
 $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
+
+// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+$query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
+$query->execute([$payload['username'] ?? '']);
+$db_role = $query->fetchColumn();
+if (!$db_role  || $db_role !== ($payload['role'] ?? '')) {
+    header('Location: /');
+    exit;
+}
+
 if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     
   if ($payload && ($payload['role'] ?? '') === 'doctor') {
@@ -18,18 +28,23 @@ if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     exit;
 }
 
+// Obtener id a partir del username
+$query = $pdo->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+$query->execute([$payload['username'] ?? '']);
+$pharmacist_id = $query->fetchColumn();
+
 $err = null;
 $ok = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bio = $_POST['bio'] ?? '';
     $stmt = $pdo->prepare('UPDATE users SET bio = ? WHERE id = ?');
-    $stmt->execute([$bio, $payload['sub']]);
+    $stmt->execute([$bio, $pharmacist_id]);
     $ok = "Bio updated.";
 }
 
 // load current bio
 $stmt = $pdo->prepare('SELECT bio FROM users WHERE id = ? LIMIT 1');
-$stmt->execute([$payload['sub']]);
+$stmt->execute([$pharmacist_id]);
 $current = $stmt->fetchColumn();
 ?>
 <!doctype html><html><head><meta charset="utf-8"><title>Edit bio</title>

@@ -8,6 +8,15 @@ $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 
+// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+$query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
+$query->execute([$payload['username'] ?? '']);
+$db_role = $query->fetchColumn();
+if (!$db_role  || $db_role !== ($payload['role'] ?? '')) {
+    header('Location: /');
+    exit;
+}
+
 if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     
   if ($payload && ($payload['role'] ?? '') === 'doctor') {
@@ -20,7 +29,7 @@ if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
 }
 
 // pharmacist info (from JWT)
-$pharmacist_name = $payload['username'] ?? 'pharmacist';
+$pharmacist_name = $payload['username'];
 
 // find associated doctor (lab: single doctor)
 $doc = $pdo->query("SELECT id, username, email, phone, bio FROM users WHERE role = 'doctor' LIMIT 1")->fetch(PDO::FETCH_ASSOC);

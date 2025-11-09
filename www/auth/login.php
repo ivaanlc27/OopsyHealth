@@ -51,7 +51,6 @@ if (in_array($user['role'], ['pharmacist','doctor'], true)) {
     require_once __DIR__ . '/../includes/jwt_utils.php';
     $secret = get_jwt_secret_from_db($pdo);
     $payload = [
-      'sub' => $user['id'],
       'username' => $user['username'],
       'role' => $user['role'],
       'iat' => time(),
