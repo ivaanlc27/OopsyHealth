@@ -1,0 +1,218 @@
+/* landing.css - OopsyHealth landing page styles
+   Health-oriented palette: teal / soft blue / light background
+   Place this file at ./www/static/css/landing.css
+*/
+
+/* Reset & base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #eaf6f6 0%, #f6fbfb 100%);
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+/* Page wrapper */
+.page-wrap {
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Header */
+.site-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.site-header .logo {
+  width: 160px;
+  height: auto;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+.site-header h1 {
+  font-size: 1.5rem;
+  color: #1f618d; /* strong medical blue */
+  font-weight: 600;
+}
+.site-header .tagline {
+  margin-top: 6px;
+  color: #4b6b78;
+  font-size: 0.95rem;
+}
+
+/* Layout */
+.container {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Left starter box */
+.starter-box {
+  width: 320px;
+  background-color: #ffffff;
+  border-left: 6px solid #16a085; /* teal accent */
+  padding: 20px;
+  border-radius: 12px;
+  color: #22313f;
+  box-shadow: 0 8px 22px rgba(12, 40, 60, 0.08);
+  line-height: 1.45;
+}
+.starter-box h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #0e6655; /* darker teal */
+  font-size: 1.1rem;
+}
+.starter-box ul { margin-top: 8px; padding-left: 18px; }
+.starter-box code {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  background: #f4f7f7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+.starter-box .note {
+  margin-top: 12px;
+  background: #fdf2e9;
+  color: #7a4a00;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* Login card (center) */
+.card {
+  min-width: 400px;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 12px 36px rgba(14, 40, 60, 0.08);
+  text-align: left;
+}
+.card h2 {
+  font-size: 1.4rem;
+  color: #117a65; /* teal heading */
+  margin-bottom: 14px;
+}
+
+/* Notices */
+.notice {
+  background-color: #e74c3c;
+  color: white;
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Forms */
+.form { display: flex; flex-direction: column; gap: 12px; }
+.form label { font-weight: 600; color: #34495e; font-size: 0.95rem; }
+.form input[type="text"],
+.form input[type="password"],
+.reset-form input[type="email"],
+.card input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #d0d7d9;
+  font-size: 1rem;
+  transition: all .15s ease;
+}
+.form input:focus,
+.reset-form input:focus {
+  outline: none;
+  border-color: #16a085;
+  box-shadow: 0 4px 12px rgba(22,160,133,0.12);
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.btn-primary {
+  background: #16a085;
+  color: #fff;
+  width: 100%;
+}
+.btn-primary:hover { background: #128f77; }
+
+.btn-secondary {
+  background: #95a5a6;
+  color: #fff;
+  margin-left: 8px;
+}
+.reset-form {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.reset-form input[type="email"] { flex: 1; }
+.reset-form .btn-secondary { flex-shrink: 0; }
+
+/* Divider */
+.divider {
+  margin: 18px 0;
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e1e6e6, transparent);
+}
+
+/* Forgot block */
+.forgot-block h3 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 16px;
+  text-align: center;
+  color: #5b7480;
+  font-size: 0.9rem;
+}
+
+/* Small helpers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.header-links { margin-top: 8px; }
+.inbox-link {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #e8f6f5;
+  color: #117a65;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #cceae7;
+}
+.inbox-link:hover { background: #d8f0ec; }
+
+

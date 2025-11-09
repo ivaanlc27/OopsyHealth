@@ -1,0 +1,31 @@
+services:
+  php:
+    build: .
+    container_name: oopsyhealth-web
+    environment:
+      SESSION_SECRET: super_secret_session_key
+    ports:
+      - "5000:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db_mysql
+    restart: always
+
+  db_mysql:
+    image: mysql:5.7
+    container_name: oopsyhealth-db
+    environment:
+      MYSQL_ROOT_PASSWORD: oopsy_root_pass
+      MYSQL_DATABASE: oopsy_db
+      MYSQL_USER: oopsy_user
+      MYSQL_PASSWORD: oopsy_user_pass
+    ports:
+      - "30000:3306"
+    volumes:
+      - oopsyhealth-db-data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: always
+
+volumes:
+  oopsyhealth-db-data:
