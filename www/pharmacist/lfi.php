@@ -12,6 +12,12 @@ $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
+    
+  if ($payload && ($payload['role'] ?? '') === 'doctor') {
+      // redirect doctors to their panel
+      header('Location: /doctor/dashboard.php');
+      exit;
+  }
     header('Location: /');
     exit;
 }

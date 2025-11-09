@@ -1,5 +1,11 @@
 <?php
 // /www/pharmacist/chat.php
+// Pharmacist chat view: show doctor's bio and ONLY the last message received FROM the doctor.
+// Escape message output so stored-XSS will not execute in the pharmacist's browser.
+//
+// WARNING: parts of this app are intentionally insecure for training purposes.
+// This view deliberately escapes messages to avoid self-inflicted XSS when the pharmacist reads the chat.
+
 session_start();
 require_once __DIR__ . '/../mail/db.php';
 require_once __DIR__ . '/../includes/jwt_utils.php';
@@ -7,43 +13,99 @@ require_once __DIR__ . '/../includes/jwt_utils.php';
 $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
+
+// Must be authenticated and at least pharmacist OR doctor (we only let pharmacist access here but
+// extend check so that reloading with a doctor token won't break — doctor should use doctor panel).
 if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
+    
+  if ($payload && ($payload['role'] ?? '') === 'doctor') {
+      // redirect doctors to their panel
+      header('Location: /doctor/dashboard.php');
+      exit;
+  }
     header('Location: /');
     exit;
 }
 
-$pharmacist_id = $payload['sub'];
-$doc = $pdo->query("SELECT id, username FROM users WHERE role='doctor' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-$messages = $pdo->prepare('SELECT c.*, u.username FROM chats c JOIN users u ON u.id = c.from_user WHERE c.to_user = ? ORDER BY c.created_at DESC');
-$messages->execute([$doc['id']]);
-$rows = $messages->fetchAll(PDO::FETCH_ASSOC);
+// Pharmacist identity from JWT (sub claim)
+$pharmacist_id = isset($payload['sub']) ? (int)$payload['sub'] : null;
+if (!$pharmacist_id) {
+    header('Location: /');
+    exit;
+}
+
+// Find the single doctor associated in the lab (simplified: the one user with role='doctor')
+$doc = $pdo->query("SELECT id, username, email, bio FROM users WHERE role='doctor' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+$doctor_id = $doc['id'] ?? null;
+$doctor_username = $doc['username'] ?? '[no doctor found]';
+$doctor_bio = $doc['bio'] ?? '';
+
+// Fetch only the last message sent from the doctor TO this pharmacist
+$lastMessage = null;
+if ($doctor_id) {
+    $stmt = $pdo->prepare('SELECT c.*, u.username AS from_username
+                           FROM chats c
+                           JOIN users u ON u.id = c.from_user
+                           WHERE c.from_user = ? AND c.to_user = ?
+                           ORDER BY c.created_at DESC
+                           LIMIT 1');
+    $stmt->execute([(int)$doctor_id, (int)$pharmacist_id]);
+    $lastMessage = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>
 <!doctype html>
-<html><head><meta charset="utf-8"><title>Chat with doctor</title>
-<link rel="stylesheet" href="/static/css/pharmacist.css">
-</head><body>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Chat with doctor — OopsyHealth</title>
+  <link rel="stylesheet" href="/static/css/pharmacist.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    /* minimal local styles in case pharmacist.css missing */
+    .card { background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .meta { color:#556; font-size:0.9rem; margin-bottom:8px; }
+    .content { background:#f8fafd; padding:12px; border-radius:6px; white-space:pre-wrap; }
+    textarea { width:100%; min-height:100px; padding:8px; border-radius:6px; border:1px solid #dfe6e9; }
+    .btn { background:#16a085; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
+    .btn-muted { background:#95a5a6; color:#fff; padding:8px 12px; border-radius:6px; text-decoration:none; }
+  </style>
+</head>
+<body>
   <main style="max-width:900px;margin:20px auto;">
     <section class="card">
-      <h2>Chat with Dr <?=htmlspecialchars($doc['username'])?></h2>
+      <h2>Chat with Dr <?= htmlspecialchars($doctor_username) ?></h2>
 
-      <form method="post" action="/pharmacist/send_message.php">
-        <label>New message</label>
-        <textarea name="message" placeholder="Type message"></textarea>
+      <div style="margin-bottom:12px;">
+        <strong>Doctor bio:</strong>
+        <div style="margin-top:6px;color:#334;">
+          <?= htmlspecialchars($doctor_bio) ?>
+        </div>
+      </div>
+
+      <form method="post" action="/pharmacist/send_message.php" style="margin-bottom:14px;">
+        <label for="message">New message</label>
+        <textarea id="message" name="message" placeholder="Type message (HTML allowed)"></textarea>
         <div style="margin-top:10px;">
           <button class="btn" type="submit">Send</button>
-          <a class="btn btn-muted" href="/pharmacist/dashboard.php">Back</a>
+          <a class="btn-muted" href="/pharmacist/dashboard.php" style="margin-left:8px;">Back</a>
         </div>
       </form>
 
       <hr style="margin:16px 0;">
 
-      <h3>Message Historial</h3>
-      <?php foreach($rows as $m): ?>
+      <h3>Last message received from Dr <?= htmlspecialchars($doctor_username) ?></h3>
+
+      <?php if ($lastMessage): ?>
         <div class="msg">
-          <div class="meta"><strong><?=htmlspecialchars($m['username'])?></strong> — <?=htmlspecialchars($m['created_at'])?></div>
-          <div class="content"><?= $m['message'] /* INTENTIONAL: stored XSS possible */ ?></div>
+          <div class="meta"><strong><?= htmlspecialchars($lastMessage['from_username']) ?></strong> — <?= htmlspecialchars($lastMessage['created_at']) ?></div>
+          <!-- ESCAPE here to prevent stored-XSS executing in pharmacist's browser -->
+          <div class="content"><?= htmlspecialchars($lastMessage['message']) ?></div>
         </div>
-      <?php endforeach; ?>
+      <?php else: ?>
+        <div class="notice">No messages received from the doctor yet.</div>
+      <?php endif; ?>
+
     </section>
   </main>
-</body></html>
+</body>
+</html>

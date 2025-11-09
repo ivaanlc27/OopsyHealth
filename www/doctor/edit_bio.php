@@ -30,7 +30,7 @@ $current = $stmt->fetchColumn();
 <link rel="stylesheet" href="/static/css/pharmacist.css"></head><body>
   <main style="max-width:900px;margin:20px auto;">
     <section class="card">
-      <h2>Edit your biography (doctor)</h2>
+      <h2>Edit your biography</h2>
       <?php if ($err): ?><div class="notice"><?=htmlspecialchars($err)?></div><?php endif; ?>
       <?php if ($ok): ?><div class="notice"><?=htmlspecialchars($ok)?></div><?php endif; ?>
 
@@ -39,7 +39,7 @@ $current = $stmt->fetchColumn();
         <textarea name="bio"><?=htmlspecialchars($current)?></textarea>
         <div style="margin-top:10px;">
           <button class="btn" type="submit">Save</button>
-          <a class="btn btn-muted" href="/doctor/inbox_chat.php">Cancel</a>
+          <a class="btn btn-muted" href="/doctor/dashboard.php">Cancel</a>
         </div>
       </form>
     </section>
