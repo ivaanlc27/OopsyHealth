@@ -83,13 +83,48 @@ INSERT INTO app_secrets (name, value) VALUES
 CREATE TABLE IF NOT EXISTS inventory (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  amount INT NOT NULL DEFAULT 0
+  amount INT NOT NULL DEFAULT 0,
+  type VARCHAR(100) DEFAULT 'unknown'
 );
 
-INSERT INTO inventory (name, amount) VALUES
-  ('aspirin', 10),
-  ('amoxicillin', 3),
-  ('ibuprofen', 0);
+-- Extended inventory with types
+INSERT INTO inventory (name, amount, type) VALUES
+  ('aspirin', 10, 'analgesic'),
+  ('acetaminophen', 25, 'analgesic'),
+  ('ibuprofen', 0, 'anti-inflammatory'),
+  ('naproxen', 15, 'anti-inflammatory'),
+  ('amoxicillin', 3, 'antibiotic'),
+  ('azithromycin', 8, 'antibiotic'),
+  ('ciprofloxacin', 5, 'antibiotic'),
+  ('doxycycline', 12, 'antibiotic'),
+  ('metformin', 20, 'antidiabetic'),
+  ('insulin', 7, 'antidiabetic'),
+  ('lisinopril', 14, 'antihypertensive'),
+  ('amlodipine', 10, 'antihypertensive'),
+  ('losartan', 9, 'antihypertensive'),
+  ('atorvastatin', 18, 'statin'),
+  ('simvastatin', 11, 'statin'),
+  ('omeprazole', 13, 'protonpump'),
+  ('pantoprazole', 6, 'protonpump'),
+  ('albuterol', 30, 'bronchodilator'),
+  ('salbutamol', 22, 'bronchodilator'),
+  ('prednisone', 4, 'steroid'),
+  ('warfarin', 2, 'anticoagulant'),
+  ('heparin', 5, 'anticoagulant'),
+  ('cetirizine', 40, 'antihistamine'),
+  ('loratadine', 35, 'antihistamine'),
+  ('oseltamivir', 7, 'antiviral'),
+  ('valacyclovir', 10, 'antiviral'),
+  ('sertraline', 9, 'antidepressant'),
+  ('fluoxetine', 12, 'antidepressant'),
+  ('risperidone', 4, 'antipsychotic'),
+  ('clopidogrel', 6, 'antiplatelet'),
+  ('hydrochlorothiazide', 8, 'diuretic'),
+  ('spironolactone', 3, 'diuretic'),
+  ('tetanus_vaccine', 50, 'vaccine'),
+  ('hepatitis_b_vaccine', 20, 'vaccine'),
+  ('amitriptyline', 5, 'neuropathic'),
+  ('gabapentin', 16, 'neuropathic');
 
 -- chats table (pharmacist <-> doctor)
 CREATE TABLE IF NOT EXISTS chats (
