@@ -1,9 +1,8 @@
 <?php
-// /www/patient/dashboard.php
-session_start();
-require_once __DIR__ . '/../mail/db.php'; // $pdo
 
-// Require login and patient role
+session_start();
+require_once __DIR__ . '/../mail/db.php';
+
 if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'patient') {
     header('Location: /');
     exit;
@@ -11,12 +10,12 @@ if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'patient') {
 
 $user = $_SESSION['user'];
 
-// find the (single) pharmacist to display (lab simplification)
+// find the (single) pharmacist to display
 $phStmt = $pdo->query("SELECT username FROM users WHERE role = 'pharmacist' LIMIT 1");
 $ph = $phStmt->fetch(PDO::FETCH_ASSOC);
 $pharmacist_username = $ph['username'] ?? 'pharmacist.not.found';
 
-// Fetch reports belonging to this patient (to list on dashboard)
+// Fetch reports belonging to this patient
 $repStmt = $pdo->prepare('SELECT id, title, created_at FROM reports WHERE owner_id = ? ORDER BY created_at DESC');
 $repStmt->execute([$user['id']]);
 $reports = $repStmt->fetchAll(PDO::FETCH_ASSOC);
@@ -36,11 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['upload_file'])) {
             $dest_dir = __DIR__ . '/../uploads';
             if (!is_dir($dest_dir)) mkdir($dest_dir, 0777, true);
 
-            // Guardar con nombre original
+            // Save with the original filename
             $safe_name = basename($f['name']);
             $dest = $dest_dir . '/' . $safe_name;
 
-            // Opcional: evitar sobrescribir
             if (file_exists($dest)) {
                 $safe_name = pathinfo($safe_name, PATHINFO_FILENAME) 
                              . '-' . time() 
@@ -48,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['upload_file'])) {
                 $dest = $dest_dir . '/' . $safe_name;
             }
 
-            if (!move_uploaded_file($f['tmp_name'], $dest)) {
+            if (!move_uploaded_file($f['tmp_name'], $dest)) { // Earlier we used codification for the filename instead of its original name
                 $upload_notice = "Failed to move uploaded file.";
             } else {
                 $public_url = '/uploads/' . $safe_name;
@@ -127,16 +125,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['upload_file'])) {
   </main>
 
   <script>
-  // client-side upload checks (purely advisory; can be bypassed)
   (function(){
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('upload_file');
-    const MAX = 2 * 1024 * 1024; // 2MB
+    const MAX = 2 * 1024 * 1024;
     form.addEventListener('submit', function(e){
       const f = fileInput.files[0];
       if (!f) { e.preventDefault(); alert('Please choose a file'); return; }
       if (f.size > MAX) { e.preventDefault(); alert('File too large (max 2 MB)'); return; }
-      const allowed = ['image/', 'application/pdf', 'text/'];
+      const allowed = ['image/', 'application/pdf', 'text/']; // Whitelist
       const ok = allowed.some(prefix => f.type.startsWith(prefix));
       if (!ok) {
         e.preventDefault();

@@ -1,14 +1,14 @@
 <?php
+
 session_start();
 require_once __DIR__ . '/../mail/db.php';
 require_once __DIR__ . '/../includes/jwt_utils.php';
 
-// Auth: doctor only
 $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 
-// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+// Verify username exists and role matches in DB
 $query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $db_role = $query->fetchColumn();
@@ -22,7 +22,6 @@ if (!$payload || ($payload['role'] ?? '') !== 'doctor') {
     exit;
 }
 
-// Get patient ID from query
 $owner_id = isset($_GET['owner']) ? (int)$_GET['owner'] : 0;
 
 // Fetch patient info
@@ -56,7 +55,6 @@ function esc($s) { return htmlspecialchars((string)$s, ENT_QUOTES|ENT_SUBSTITUTE
 <body>
 <div class="container">
   <h2>Reports for <?= esc($patient['username']) ?> (<?= esc($patient['email']) ?>)</h2>
-
   <?php if (empty($reports)): ?>
     <p>No reports found for this patient.</p>
   <?php else: ?>
@@ -67,7 +65,6 @@ function esc($s) { return htmlspecialchars((string)$s, ENT_QUOTES|ENT_SUBSTITUTE
       </div>
     <?php endforeach; ?>
   <?php endif; ?>
-
   <p><a class="btn-link" href="/doctor/dashboard.php">Back to Dashboard</a></p>
 </div>
 </body>

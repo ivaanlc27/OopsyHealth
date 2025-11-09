@@ -1,10 +1,4 @@
 <?php
-// /www/pharmacist/chat.php
-// Pharmacist chat view: show doctor's bio and ONLY the last message received FROM the doctor.
-// Escape message output so stored-XSS will not execute in the pharmacist's browser.
-//
-// WARNING: parts of this app are intentionally insecure for training purposes.
-// This view deliberately escapes messages to avoid self-inflicted XSS when the pharmacist reads the chat.
 
 session_start();
 require_once __DIR__ . '/../mail/db.php';
@@ -14,7 +8,7 @@ $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 
-// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+// Verify username exists and role matches in DB
 $query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $db_role = $query->fetchColumn();
@@ -26,7 +20,6 @@ if (!$db_role  || $db_role !== ($payload['role'] ?? '')) {
 if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     
   if ($payload && ($payload['role'] ?? '') === 'doctor') {
-      // redirect doctors to their panel
       header('Location: /doctor/dashboard.php');
       exit;
   }
@@ -34,12 +27,11 @@ if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     exit;
 }
 
-// Obtener id a partir del username
 $query = $pdo->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $pharmacist_id = $query->fetchColumn();
 
-// Find the single doctor associated in the lab (simplified: the one user with role='doctor')
+// Find the single doctor associated
 $doc = $pdo->query("SELECT id, username, email, bio FROM users WHERE role='doctor' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 $doctor_id = $doc['id'] ?? null;
 $doctor_username = $doc['username'] ?? '[no doctor found]';
@@ -66,7 +58,6 @@ if ($doctor_id) {
   <link rel="stylesheet" href="/static/css/pharmacist.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    /* minimal local styles in case pharmacist.css missing */
     .card { background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06); }
     .meta { color:#556; font-size:0.9rem; margin-bottom:8px; }
     .content { background:#f8fafd; padding:12px; border-radius:6px; white-space:pre-wrap; }
@@ -103,7 +94,6 @@ if ($doctor_id) {
       <?php if ($lastMessage): ?>
         <div class="msg">
           <div class="meta"><strong><?= htmlspecialchars($lastMessage['from_username']) ?></strong> — <?= htmlspecialchars($lastMessage['created_at']) ?></div>
-          <!-- ESCAPE here to prevent stored-XSS executing in pharmacist's browser -->
           <div class="content"><?= htmlspecialchars($lastMessage['message']) ?></div>
         </div>
       <?php else: ?>

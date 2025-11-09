@@ -1,15 +1,10 @@
 <?php
-// confirm.php
-// Single page to validate a token (generate OTP) and then accept OTP + new password.
-// Shows OTP icon + OTP value when the target email is Alice (lab convenience).
-//
-// WARNING: intentionally insecure lab behavior. Do NOT use in production.
 
 session_start();
 require_once __DIR__ . '/utils.php';
-require_once __DIR__ . '/../mail/db.php'; // $pdo
+require_once __DIR__ . '/../mail/db.php';
 
-// lab "Alice" constant — change if your Alice email is different
+// Alice is the initial user for lab exploitation
 $ALICE_EMAIL = 'alice.smith@oopsyhealth.com';
 
 function safe_post(string $k) {
@@ -20,7 +15,7 @@ $err = null;
 $ok = null;
 $otp_generated = null;
 
-// Decrypt target email from session (encrypted by request.php)
+// Decrypt target email from session
 $enc_email = $_SESSION['reset_email_enc'] ?? null;
 $target_email = $enc_email ? decrypt_session_value($enc_email) : null;
 if ($enc_email && $target_email === null) {
@@ -37,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token_input']) && !is
     unset($_SESSION['reset_show_otp']);
 
     if (!empty($err)) {
-        // nothing
     } else {
         $token = trim($_POST['token_input']);
         if ($token === '') {
@@ -83,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token_input']) && !is
                         }
                     }
 
-                    // If the target account is Alice, allow showing the OTP icon + value (lab convenience)
+                    // If the target account is Alice, allow showing the OTP icon + value
                     if (strcasecmp($target_email, $ALICE_EMAIL) === 0) {
                         $_SESSION['reset_show_otp'] = true;
                     } else {
@@ -98,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token_input']) && !is
 // Step B: OTP + new password submission -> validate and perform reset, then delete token row
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['otp_input'], $_POST['new_password'])) {
     if (!empty($err)) {
-        // nothing
     } else {
         if (empty($_SESSION['reset_token']) || empty($_SESSION['reset_token_id'])) {
             $err = "No token in session. Start the reset flow first.";
@@ -156,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['otp_input'], $_POST['
 
                             $ok = "Password updated for " . htmlspecialchars($target_email) . ". You can now log in with the new password.";
 
-                            // cleanup session keys for this flow (keep reset_email_enc so the session still "remembers" the requested email)
+                            // cleanup session keys for this flow
                             unset($_SESSION['reset_token']);
                             unset($_SESSION['reset_token_id']);
                             unset($_SESSION['reset_prefill_otp']);
@@ -184,7 +177,6 @@ $show_otp_for_alice = !empty($_SESSION['reset_show_otp']) && strcasecmp($target_
   <link rel="stylesheet" href="/static/css/email.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    /* small inline tweaks to position the otp icon nicely */
     .otp-banner {
       display:flex;
       align-items:center;
@@ -236,7 +228,6 @@ $show_otp_for_alice = !empty($_SESSION['reset_show_otp']) && strcasecmp($target_
         </p>
 
         <?php if ($show_otp_for_alice): ?>
-          <!-- Lab convenience: show OTP widget for Alice -->
           <div class="otp-banner" role="status" aria-live="polite">
             <img src="/static/images/otp.png" alt="OTP icon">
             <div>

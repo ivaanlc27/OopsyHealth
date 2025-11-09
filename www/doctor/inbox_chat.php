@@ -1,14 +1,14 @@
 <?php
+
 session_start();
 require_once __DIR__ . '/../mail/db.php';
 require_once __DIR__ . '/../includes/jwt_utils.php';
 
-// Auth: doctor only
 $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 
-// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+// Verify username exists and role matches in DB
 $query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $db_role = $query->fetchColumn();
@@ -22,7 +22,6 @@ if (!$payload || ($payload['role'] ?? '') !== 'doctor') {
     exit;
 }
 
-// Obtener id a partir del username
 $query = $pdo->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $doctor_id = $query->fetchColumn();
@@ -38,7 +37,6 @@ $chats = $pdo->prepare('
 $chats->execute([$doctor_id, $doctor_id]);
 $messages = $chats->fetchAll(PDO::FETCH_ASSOC);
 
-// Escape helper
 function esc($s) { return htmlspecialchars((string)$s, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'); }
 ?>
 <!doctype html>
@@ -52,33 +50,10 @@ function esc($s) { return htmlspecialchars((string)$s, ENT_QUOTES|ENT_SUBSTITUTE
 body { font-family: sans-serif; background:#f9f9f9; margin:0; padding:0; }
 .container { max-width:1200px; margin:20px auto; padding:0 12px; }
 .chat-card { background:#fff; border:1px solid #ddd; border-radius:8px; padding:12px; display:flex; flex-direction:column; height:80vh; max-width:1200px; }
-.chat-window { 
-    flex:1; 
-    overflow-y:auto; 
-    padding:12px; 
-    display:flex; 
-    flex-direction: column; /* Mensajes uno debajo de otro */
-}
-
-.chat-msg {
-    max-width:70%; 
-    padding:8px 12px; 
-    border-radius:16px; 
-    margin:6px 0; 
-    /* quitamos display:inline-block */
-    word-wrap: break-word;
-}
-
-.chat-msg.pharmacist { 
-    background:#e0f7fa; 
-    align-self:flex-start; /* izquierda */
-}
-
-.chat-msg.doctor { 
-    background:#c8e6c9; 
-    align-self:flex-end; /* derecha */
-}
-
+.chat-window { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction: column; }
+.chat-msg { max-width:70%; padding:8px 12px; border-radius:16px; margin:6px 0; word-wrap: break-word; }
+.chat-msg.pharmacist { background:#e0f7fa; align-self:flex-start; }
+.chat-msg.doctor { background:#c8e6c9; align-self:flex-end; }
 .chat-meta { font-size:0.8em; color:#555; margin-bottom:2px; }
 .chat-form { margin-top:12px; display:flex; }
 .chat-form textarea { flex:1; padding:8px; border-radius:6px; border:1px solid #ccc; resize:none; }
@@ -108,7 +83,7 @@ body { font-family: sans-serif; background:#f9f9f9; margin:0; padding:0; }
 </div>
 
 <script>
-// Scroll to bottom
+
 const chatWin = document.getElementById('chatWindow');
 chatWin.scrollTop = chatWin.scrollHeight;
 </script>

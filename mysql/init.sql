@@ -1,5 +1,3 @@
--- init.sql for OopsyHealth vulnerable lab (English usernames, bcrypt password hashes)
-
 DROP DATABASE IF EXISTS oopsy_db;
 
 CREATE DATABASE oopsy_db;
@@ -17,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- password_resets intentionally does NOT record the email/user association (vulnerability)
+-- password_resets intentionally does NOT record the email/user association
 CREATE TABLE IF NOT EXISTS password_resets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   token VARCHAR(255) NOT NULL,
@@ -26,7 +24,7 @@ CREATE TABLE IF NOT EXISTS password_resets (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- reports table for practicing IDOR (owner_id links to users.id)
+-- reports table for practicing IDOR
 CREATE TABLE IF NOT EXISTS reports (
   id INT AUTO_INCREMENT PRIMARY KEY,
   owner_id INT NOT NULL,
@@ -36,12 +34,13 @@ CREATE TABLE IF NOT EXISTS reports (
   FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Insert initial users (bcrypt hashes)
+-- Insert initial users
 
--- patientpass
--- sdhGSK7299kb@#$$jsljdlsj
--- ndoasyr0qHHEQ3Y0
--- mlsAklNLCSyskSd62klG
+-- alice.smith:patientpass
+-- bob.jones:sdhGSK7299kb@#$$jsljdlsj
+-- carla.miller:ndoasyr0qHHEQ3Y0
+-- david.bennett:mlsAklNLCSyskSd62klG
+
 INSERT INTO users (username, email, role, phone, password_hash) VALUES ('alice.smith', 'alice.smith@oopsyhealth.com', 'patient', '+441234567890', '$2b$12$I3l.gEJFDUdO97acELYQpu8luFtgaJO0jFEfbfS5Xh9koDVSfpg9G');
 INSERT INTO users (username, email, role, phone, password_hash) VALUES ('bob.jones', 'bob.jones@oopsyhealth.com', 'patient', '+441234567891', '$2b$12$ee/2HFhmU3KU9w08BypaGOzKpsw43f/nuSDeTVE/ILBSqgjnPSpgW');
 INSERT INTO users (username, email, role, phone, password_hash) VALUES ('carla.miller', 'carla.miller@oopsyhealth.com', 'pharmacist', '+441234567892', '$2b$12$vNoXYObSU7sFkAl1Kczfpe/El0v6wSsF.jGFVAaB7S4FgJq74WQqm');
@@ -53,7 +52,7 @@ INSERT INTO reports (owner_id, title, content) VALUES
   (1, 'Prescription - April 2025', 'Amoxicillin 500mg, take one every 8 hours for 7 days'),
   (2, 'Lab Results - June 2025', 'Cholesterol: 210 mg/dL\nNotes: Borderline high');
 
--- emails table: simulated mailbox for the lab
+-- emails table: simulated mailbox
 CREATE TABLE IF NOT EXISTS emails (
   id INT AUTO_INCREMENT PRIMARY KEY,
   to_email VARCHAR(255) NOT NULL,
@@ -62,12 +61,12 @@ CREATE TABLE IF NOT EXISTS emails (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert some welcome emails (for patients) and a password reset message containing the token + OTP
+-- Insert some welcome emails for patients
 INSERT INTO emails (to_email, subject, body) VALUES
   ('alice.smith@oopsyhealth.com', 'Welcome to OopsyHealth', 'Hello Alice,\n\nWelcome to OopsyHealth. \n\nRegards,\nOopsyHealth Team'),
   ('bob.jones@oopsyhealth.com', 'Welcome to OopsyHealth', 'Hello Bob,\n\nWelcome to OopsyHealth. \n\nRegards,\nOopsyHealth Team');
 
--- secrets table (store jwt secret here)
+-- secrets table
 CREATE TABLE IF NOT EXISTS app_secrets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) UNIQUE NOT NULL,
@@ -75,7 +74,6 @@ CREATE TABLE IF NOT EXISTS app_secrets (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- example secret - change for your lab, but store here for teaching secret-leak scenarios
 INSERT INTO app_secrets (name, value) VALUES
   ('jwt_secret', 'supersecretkeyforoopsyhealthapp!');
 
@@ -87,7 +85,6 @@ CREATE TABLE IF NOT EXISTS inventory (
   type VARCHAR(100) DEFAULT 'unknown'
 );
 
--- Extended inventory with types
 INSERT INTO inventory (name, amount, type) VALUES
   ('aspirin', 10, 'analgesic'),
   ('acetaminophen', 25, 'analgesic'),
@@ -126,7 +123,7 @@ INSERT INTO inventory (name, amount, type) VALUES
   ('amitriptyline', 5, 'neuropathic'),
   ('gabapentin', 16, 'neuropathic');
 
--- chats table (pharmacist <-> doctor)
+-- chats table (in our lab, pharmacist <-> doctor)
 CREATE TABLE IF NOT EXISTS chats (
   id INT AUTO_INCREMENT PRIMARY KEY,
   from_user INT NOT NULL,

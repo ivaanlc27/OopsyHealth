@@ -1,11 +1,8 @@
 <?php
 session_start();
 
-// Example: your auth controller will set $_SESSION['error'] or pass messages via flash
 $error = $_SESSION['error'] ?? null;
 unset($_SESSION['error']);
-
-// preserve old input (if any)
 $old_user = $_SESSION['old_user'] ?? '';
 unset($_SESSION['old_user']);
 ?>
@@ -20,7 +17,6 @@ unset($_SESSION['old_user']);
 <body>
   <div class="page-wrap">
     <header class="site-header">
-      <!-- Put your downloaded logo at ./www/static/images/logo.png -->
       <img class="logo" src="/static/images/logo.png" alt="OopsyHealth Logo">
       <h1>OopsyHealth — Telemedicine</h1>
 
@@ -33,7 +29,6 @@ unset($_SESSION['old_user']);
     </header>
 
     <main class="container">
-      <!-- Left info box -->
       <aside class="starter-box" aria-labelledby="starter-title">
         <h3 id="starter-title">Lab Starter Account</h3>
 
@@ -48,7 +43,6 @@ unset($_SESSION['old_user']);
         </ul>
       </aside>
 
-      <!-- Center login box -->
       <section class="card" aria-labelledby="login-title">
         <h2 id="login-title">Login</h2>
 
@@ -74,7 +68,6 @@ unset($_SESSION['old_user']);
           <h3>Forgot password?</h3>
           <p>Request a password reset token.</p>
 
-          <!-- classic 'forgot password' input to trigger reset flow -->
           <form action="/reset/request.php" method="post" class="reset-form" autocomplete="off">
             <label for="reset-email" class="sr-only">Email</label>
             <input id="reset-email" name="email" type="email" placeholder="name.surname@oopsyhealth.com" required>

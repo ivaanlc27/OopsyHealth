@@ -32,11 +32,10 @@ RUN apt-get update && apt-get install -y \
     && pip install --upgrade selenium \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a cron job
+# Create a cron job for the doctor bot
 RUN echo "* * * * * root python3 /var/www/html/doctor/doctor_bot.py > /var/log/doctor_bot.log 2>&1" \
       > /etc/cron.d/doctor-bot
 
-# Correct permissions for cron file
 RUN chmod 0644 /etc/cron.d/doctor-bot
 
 CMD service cron start && apache2-foreground

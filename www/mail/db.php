@@ -1,5 +1,5 @@
 <?php
-// db.php - simple PDO helper
+
 $host = 'db_mysql';
 $db   = 'oopsy_db';
 $user = 'oopsy_user';
@@ -15,7 +15,6 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    // In a lab, show message; in production do not expose.
     echo "DB connection failed: " . htmlspecialchars($e->getMessage());
     exit;
 }

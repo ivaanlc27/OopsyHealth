@@ -1,8 +1,3 @@
-/* landing.css - OopsyHealth landing page styles
-   Health-oriented palette: teal / soft blue / light background
-   Place this file at ./www/static/css/landing.css
-*/
-
 /* Reset & base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html,body { height: 100%; }

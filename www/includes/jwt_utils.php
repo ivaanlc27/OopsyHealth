@@ -1,6 +1,4 @@
 <?php
-// /www/includes/jwt_utils.php
-// Simple JWT HMAC-SHA256 helpers (no external libs). Intentionally simple for lab.
 
 function get_jwt_secret_from_db(PDO $pdo) {
     $stmt = $pdo->prepare("SELECT value FROM app_secrets WHERE name = 'jwt_secret' LIMIT 1");

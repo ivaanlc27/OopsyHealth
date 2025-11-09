@@ -1,9 +1,8 @@
 <?php
-// /www/auth/login.php
-session_start();
-require_once __DIR__ . '/../mail/db.php'; // $pdo
 
-// simple helper
+session_start();
+require_once __DIR__ . '/../mail/db.php';
+
 function redirect_back_with_error($msg, $username = '') {
     $_SESSION['error'] = $msg;
     $_SESSION['old_user'] = $username;
@@ -23,7 +22,6 @@ if ($username === '' || $password === '') {
     redirect_back_with_error('Please provide username and password.', $username);
 }
 
-// lookup by username
 $stmt = $pdo->prepare('SELECT id, username, email, role, password_hash FROM users WHERE username = ? LIMIT 1');
 $stmt->execute([$username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -40,13 +38,13 @@ $_SESSION['user'] = [
     'role' => $user['role']
 ];
 
-// redirect based on role (patients go to patient dashboard)
+// redirect based on role
 if ($user['role'] === 'patient') {
     header('Location: /patient/dashboard.php');
     exit;
 }
 
-// after successful login (you already have $user row and $pdo)
+// Generate JWT for pharmacist and doctor roles
 if (in_array($user['role'], ['pharmacist','doctor'], true)) {
     require_once __DIR__ . '/../includes/jwt_utils.php';
     $secret = get_jwt_secret_from_db($pdo);
@@ -68,7 +66,5 @@ if (in_array($user['role'], ['pharmacist','doctor'], true)) {
     }
 }
 
-
-// for other roles, redirect to home (you can expand later)
 header('Location: /');
 exit;

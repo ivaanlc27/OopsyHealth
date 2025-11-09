@@ -1,13 +1,10 @@
 <?php
-// /www/doctor/review_chat.php
-// Intentionally renders raw messages for lab automation (DO NOT use in production)
 
 session_start();
-require_once __DIR__ . '/../mail/db.php';    // $pdo
-require_once __DIR__ . '/../includes/jwt_utils.php'; // get_jwt_secret_from_db, jwt_encode
+require_once __DIR__ . '/../mail/db.php';
+require_once __DIR__ . '/../includes/jwt_utils.php';
 
-// doctor id in your fixture (adjust if different)
-$doctor_id = 4;
+$doctor_id = 4; // fixed
 
 // Build JWT for the doctor and set as cookie so the headless browser has auth
 $secret = get_jwt_secret_from_db($pdo);
@@ -17,10 +14,8 @@ $payload = [
     'iat' => time(),
     'exp' => time() + 60*60 // 1 hour
 ];
-// jwt_encode should exist in your jwt_utils.php (used earlier)
-$token = jwt_encode($payload, $secret);
 
-// set cookie (path=/ so it covers the app)
+$token = jwt_encode($payload, $secret);
 setcookie('auth_token', $token, 0, '/', '', false, false);
 
 // Fetch messages for doctor
@@ -50,7 +45,6 @@ header('Content-Type: text/html; charset=utf-8');
   <?php foreach ($rows as $m): ?>
     <div class="msg">
       <div class="meta"><?= htmlspecialchars($m['username']) ?> — <?= htmlspecialchars($m['created_at']) ?></div>
-      <!-- INTENTIONAL: message output RAW so stored XSS executes in the doctor's browser -->
       <div class="body"><?= $m['message'] ?></div>
     </div>
   <?php endforeach; ?>

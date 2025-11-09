@@ -1,14 +1,14 @@
 <?php
-// /www/pharmacist/dashboard.php
+
 session_start();
-require_once __DIR__ . '/../mail/db.php'; // $pdo
+require_once __DIR__ . '/../mail/db.php';
 require_once __DIR__ . '/../includes/jwt_utils.php';
 
 $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 
-// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+// Verify username exists and role matches in DB
 $query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $db_role = $query->fetchColumn();
@@ -20,7 +20,6 @@ if (!$db_role  || $db_role !== ($payload['role'] ?? '')) {
 if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     
   if ($payload && ($payload['role'] ?? '') === 'doctor') {
-      // redirect doctors to their panel
       header('Location: /doctor/dashboard.php');
       exit;
   }
@@ -28,10 +27,9 @@ if (!$payload || ($payload['role'] ?? '') !== 'pharmacist') {
     exit;
 }
 
-// pharmacist info (from JWT)
 $pharmacist_name = $payload['username'];
 
-// find associated doctor (lab: single doctor)
+// find associated doctor (single doctor)
 $doc = $pdo->query("SELECT id, username, email, phone, bio FROM users WHERE role = 'doctor' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 $doctor_username = $doc['username'] ?? '[no doctor]';
 $doctor_bio = $doc['bio'] ?? '';

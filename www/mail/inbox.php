@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once __DIR__ . '/db.php';
 
@@ -48,7 +49,6 @@ $emails = $stmt->fetchAll();
               <td style="padding:10px;vertical-align:top;white-space:nowrap;"><?=htmlspecialchars($e['created_at'])?></td>
               <td style="padding:10px;vertical-align:top;"><strong><?=htmlspecialchars($e['subject'])?></strong><div style="color:#4b6b78;margin-top:6px;white-space:pre-wrap;"><?=htmlspecialchars($e['body'])?></div></td>
               <td style="padding:10px;vertical-align:top;text-align:right;">
-                <!-- Optionally: link to view single message if you want -->
               </td>
             </tr>
           <?php endforeach; ?>

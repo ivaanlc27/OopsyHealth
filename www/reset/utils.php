@@ -1,9 +1,5 @@
 <?php
-// utils.php
-// Small helpers to encrypt/decrypt session values using AES-256-GCM.
-// Requires a server secret available as env var SESSION_SECRET or in file ../.session_secret
 
-// Get key: prefer environment variable, else fallback to file ../.session_secret
 function get_session_secret(): ?string {
     $env = getenv('SESSION_SECRET');
     if ($env && strlen(trim($env)) >= 16) {

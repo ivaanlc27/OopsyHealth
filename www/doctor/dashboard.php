@@ -1,5 +1,5 @@
 <?php
-// /www/doctor/dashboard.php
+
 session_start();
 require_once __DIR__ . '/../mail/db.php';
 require_once __DIR__ . '/../includes/jwt_utils.php';
@@ -9,7 +9,7 @@ $token = $_COOKIE['auth_token'] ?? null;
 $secret = get_jwt_secret_from_db($pdo);
 $payload = $token ? jwt_decode_and_verify($token, $secret) : null;
 
-// Comprobar en la base de datos si el usuario definido en el token existe y tiene efectivamente el rol afirmado por el token
+// Verify username exists and role matches in DB
 $query = $pdo->prepare('SELECT role FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $db_role = $query->fetchColumn();
@@ -23,7 +23,6 @@ if (!$payload || ($payload['role'] ?? '') !== 'doctor') {
     exit;
 }
 
-// Obtener id a partir del username
 $query = $pdo->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
 $query->execute([$payload['username'] ?? '']);
 $doctor_id = $query->fetchColumn();
@@ -36,7 +35,6 @@ $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
 // List patients
 $patients = $pdo->query("SELECT id, username, email FROM users WHERE role = 'patient' ORDER BY username ASC")->fetchAll(PDO::FETCH_ASSOC);
 
-// Helper to render safe fields
 function esc($s) { return htmlspecialchars((string)$s, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'); }
 ?>
 <!doctype html>

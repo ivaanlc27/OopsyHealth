@@ -1,15 +1,14 @@
 <?php
-// /www/patient/report.php
-session_start();
-require_once __DIR__ . '/../mail/db.php'; // $pdo
 
-// require login
+session_start();
+require_once __DIR__ . '/../mail/db.php';
+
 if (empty($_SESSION['user'])) {
     header('Location: /');
     exit;
 }
 
-// fetch id from GET (no owner check == IDOR)
+// IDOR: No ownership check
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($id <= 0) {
     http_response_code(404);
