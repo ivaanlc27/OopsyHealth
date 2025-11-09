@@ -46,6 +46,30 @@ if ($user['role'] === 'patient') {
     exit;
 }
 
+// after successful login (you already have $user row and $pdo)
+if (in_array($user['role'], ['pharmacist','doctor'], true)) {
+    require_once __DIR__ . '/../includes/jwt_utils.php';
+    $secret = get_jwt_secret_from_db($pdo);
+    $payload = [
+      'sub' => $user['id'],
+      'username' => $user['username'],
+      'role' => $user['role'],
+      'iat' => time(),
+      'exp' => time() + 60*60*4
+    ];
+    $token = jwt_encode($payload, $secret);
+    setcookie('auth_token', $token, 0, '/', '', false, false); // httpOnly false
+
+    if ($user['role'] === 'pharmacist') {
+        header('Location: /pharmacist/dashboard.php');
+        exit;
+    } elseif ($user['role'] === 'doctor') {
+        header('Location: /doctor/dashboard.php');
+        exit;
+    }
+}
+
+
 // for other roles, redirect to home (you can expand later)
 header('Location: /');
 exit;

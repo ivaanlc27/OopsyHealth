@@ -1,0 +1,76 @@
+/* pharmacist.css - styles for pharmacist pages */
+* { box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+body {
+  margin: 0;
+  background: #f3fbfb;
+  color: #243238;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* header */
+.ph-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  background: linear-gradient(90deg,#e6fbfb,#ddf7f7);
+  border-bottom: 1px solid #e0efef;
+}
+.brand { display:flex; align-items:center; gap:12px; }
+.logo-small { width:42px; height:auto; }
+.ph-header h1 { font-size:1.1rem; margin:0; color:#1f5560; }
+
+/* main layout */
+main { padding:20px; width:100%; max-width:1100px; margin:18px auto; }
+.card { background:#fff; border-radius:10px; padding:18px; box-shadow:0 6px 20px rgba(17,34,34,0.04); margin-bottom:14px; }
+.panel { padding: 12px; }
+
+/* simple buttons */
+.btn {
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:8px;
+  background:#16a085;
+  color:white;
+  border:none;
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:600;
+}
+.btn-muted { background:#95a5a6; }
+.btn-link { background:transparent; color:#16a085; border:none; padding:0; font-weight:600; cursor:pointer; }
+
+/* forms */
+form label { display:block; margin-bottom:8px; font-weight:600; color:#2c3e50; }
+input[type="text"], input[type="number"], textarea {
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #dbecec;
+  background:#fcfffe;
+  margin-top:6px;
+  font-size:0.95rem;
+}
+textarea { min-height:120px; resize:vertical; }
+
+/* chat list */
+.msg {
+  border:1px solid #e6f2f2;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:8px;
+  background:#fbffff;
+}
+.msg .meta { font-size:0.85rem; color:#5b6e6f; margin-bottom:6px; }
+.msg .content { color:#213233; }
+
+/* small helpers */
+.hint { font-size:0.9rem; color:#527274; margin-top:6px; }
+.notice { background:#fff4cc; border-left:4px solid #f39c12; padding:10px; border-radius:6px; margin-bottom:10px; }
+
+/* responsive */
+@media (min-width:900px) {
+  .two-col { display:grid; grid-template-columns: 320px 1fr; gap:18px; align-items:start; }
+}

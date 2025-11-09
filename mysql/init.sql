@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   role ENUM('patient','pharmacist','doctor','admin') NOT NULL DEFAULT 'patient',
   phone VARCHAR(30),
   password_hash VARCHAR(255) NOT NULL,
+  bio VARCHAR(255) DEFAULT '',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -65,3 +66,44 @@ CREATE TABLE IF NOT EXISTS emails (
 INSERT INTO emails (to_email, subject, body) VALUES
   ('alice.smith@oopsyhealth.com', 'Welcome to OopsyHealth', 'Hello Alice,\n\nWelcome to OopsyHealth. \n\nRegards,\nOopsyHealth Team'),
   ('bob.jones@oopsyhealth.com', 'Welcome to OopsyHealth', 'Hello Bob,\n\nWelcome to OopsyHealth. \n\nRegards,\nOopsyHealth Team');
+
+-- secrets table (store jwt secret here)
+CREATE TABLE IF NOT EXISTS app_secrets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  value TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- example secret - change for your lab, but store here for teaching secret-leak scenarios
+INSERT INTO app_secrets (name, value) VALUES
+  ('jwt_secret', 'supersecretkeyforoopsyhealthapp!');
+
+-- inventory table (medicines)
+CREATE TABLE IF NOT EXISTS inventory (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  amount INT NOT NULL DEFAULT 0
+);
+
+INSERT INTO inventory (name, amount) VALUES
+  ('aspirin', 10),
+  ('amoxicillin', 3),
+  ('ibuprofen', 0);
+
+-- chats table (pharmacist <-> doctor)
+CREATE TABLE IF NOT EXISTS chats (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  from_user INT NOT NULL,
+  to_user INT NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (from_user) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (to_user) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- set some initial bios for the lab users
+UPDATE users SET bio = 'Patient. Enjoys long walks and reading medical journals.' WHERE username = 'alice.smith';
+UPDATE users SET bio = 'Patient with a curious mind. Prefers email notifications.' WHERE username = 'bob.jones';
+UPDATE users SET bio = 'Pharmacist at OopsyHealth. Focus on medication safety and patient counseling.' WHERE username = 'carla.miller';
+UPDATE users SET bio = 'General practitioner. Please schedule all consults through the portal.' WHERE username = 'david.bennett';
