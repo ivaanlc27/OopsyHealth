@@ -56,7 +56,7 @@ unset($_SESSION['old_user']);
           <div class="notice" role="alert"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form class="form" action="/auth/login" method="post" autocomplete="off" novalidate>
+        <form class="form" action="/auth/login.php" method="post" autocomplete="off" novalidate>
           <label for="username">Username
             <input id="username" name="username" type="text" value="<?= htmlspecialchars($old_user) ?>" required autofocus>
           </label>
