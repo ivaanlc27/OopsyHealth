@@ -23,4 +23,20 @@ RUN rm -f /var/log/apache2/access.log /var/log/apache2/error.log || true && \
 COPY zz-logs-combined.conf /etc/apache2/conf-available/zz-logs-combined.conf
 RUN a2enconf zz-logs-combined
 
-CMD apache2-foreground
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    chromium \
+    chromium-driver \
+    cron \
+    && pip install --upgrade selenium \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a cron job
+RUN echo "* * * * * root python3 /var/www/html/doctor/doctor_bot.py > /var/log/doctor_bot.log 2>&1" \
+      > /etc/cron.d/doctor-bot
+
+# Correct permissions for cron file
+RUN chmod 0644 /etc/cron.d/doctor-bot
+
+CMD service cron start && apache2-foreground
