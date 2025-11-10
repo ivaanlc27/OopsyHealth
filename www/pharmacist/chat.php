@@ -80,7 +80,7 @@ if ($doctor_id) {
 
       <form method="post" action="/pharmacist/send_message.php" style="margin-bottom:14px;">
         <label for="message">New message</label>
-        <textarea id="message" name="message" placeholder="Type message (HTML allowed)"></textarea>
+        <textarea id="message" name="message" placeholder="Type message"></textarea>
         <div style="margin-top:10px;">
           <button class="btn" type="submit">Send</button>
           <a class="btn-muted" href="/pharmacist/dashboard.php" style="margin-left:8px;">Back</a>

