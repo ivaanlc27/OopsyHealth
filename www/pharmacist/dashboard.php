@@ -76,7 +76,7 @@ $doctor_bio = $doc['bio'] ?? '';
 
         <div style="margin-top:12px;">
           <p><a class="btn" href="/pharmacist/med_check.php">Check medication stock</a></p>
-          <p style="margin-top:8px;"><a class="btn" href="/pharmacist/lfi.php?file=drug_info.md">View drug info</a></p>
+          <p style="margin-top:8px;"><a class="btn" href="/pharmacist/med_info.php?file=drug_info.md">View drug info</a></p>
           <p style="margin-top:8px;"><a class="btn" href="/pharmacist/chat.php">Chat with doctor</a></p>
         </div>
       </section>
